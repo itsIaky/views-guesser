@@ -1,0 +1,544 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        {% block head %}
+        <!-- required="" meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
+        <title></title>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+
+        {% block styles %}
+            <!-- Bootstrap CSS -->
+            {{ bootstrap.load_css() }}
+        {% endblock %}
+
+        <title>Your page title</title>
+        {% endblock %}
+    </head>
+    <body style="background-color:#343541">
+        <!-- Your page content -->
+        {% block content %}
+
+        <h1 class="text-center text-light font-weight-bold mt-5 mb-3">Pirated Movies AI</h1>
+
+        <form id="film-form" class="row g-3 needs-validation was-validated" novalidate="">
+            <div class="container text-center">
+                <div class="row justify-content-md-center">
+    
+                    <div class="col col-lg-2 my-4">
+                        <div class="card" style="background-color:#3E3F4B">
+                            <div class="card-body text-light">
+                                <label for="imdb-validation" class="form-label">IMDb Rating</label>
+                                <input type="number" min="0" max="10" step="0.1" onKeyDown="return false" class="form-control" id="imdb-validation" placeholder="6,8" required="">
+                                <div class="invalid-feedback">
+                                    Provide the film IMDb rating!
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="col-lg-2 my-4">
+                        <div class="card" style="background-color:#3E3F4B">
+                            <div class="card-body text-light">
+                                <label for="age-validation" class="form-label">Age Rating</label>
+                                <select class="form-select form-select" aria-label=".form-select-sm example" id="age-validation" required="">
+                                    <option selected="" disabled="" value="">Select rating</option>
+                                    <option value=0>TV-PG</option>
+                                    <option value=1>R</option>
+                                    <option value=2>Unrated</option>
+                                    <option value=3>PG-13</option>
+                                    <option value=4>TV-MA</option>
+                                    <option value=5>TV-G</option>
+        
+                                    <option value=6>TV-14</option>
+                                    <option value=7>PG</option>
+                                    <option value=8>TV-Y7</option>
+        
+                                    <option value=9>G</option>
+                                    <option value=10>NC-17</option>
+                                    <option value=11>TV-Y</option>
+        
+                                    <option value=12>Approved</option>
+                                    <option value=13>TV-Y7-FV</option>
+                                    <option value=14>MA-17</option>
+        
+                                    <option value=15>TV-13</option>
+                                    <option value=16>Drama</option>
+                                    <option value=17>Drama, Romance</option>
+        
+                                    <option value=18>Passed</option>
+                                    <option value=19>18+</option>
+        
+                                </select>
+                                <div class="invalid-feedback">
+                                    Please select a valid Age rating!
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+    
+
+                    <div class="col-lg-2 my-4">
+                        <div class="card" style="background-color:#3E3F4B">
+                            <div class="card-body text-light">
+                                <label for="industry-validation" class="form-label">Industry</label>
+                                <select class="form-select form-select" aria-label=".form-select-sm example" id="industry-validation" required="">
+                                    <option selected="" disabled="" value="">Select industry</option>
+                                    <option value=0>Hollywood / English</option>
+                                    <option value=1>Tollywood</option>
+                                    <option value=2>Wrestling</option>
+                                    <option value=3>Bollywood / Indian</option>
+                                    <option value=4>Punjabi</option>
+                                    <option value=5>Anime / Kids</option>
+        
+                                    <option value=6>Dub / Dual Audio</option>
+                                    <option value=7>Pakistani</option>
+                                    <option value=8>Stage shows</option>
+        
+                                    <option value=9>3D Movies</option>
+                                   
+                                </select>
+                                <div class="invalid-feedback">
+                                    Please select a valid Industry!
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="col-lg-2 my-4">
+                        <div class="card" style="background-color:#3E3F4B">
+                            <div class="card-body text-light">
+                                <label for="release_date" class="form-label">Release Date</label>
+                                <input class="form-control" id="release_date" name="date" placeholder="MM/DD/YYY" type="date" onKeyDown="return false" required=""/>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="row justify-content-md-center">
+                  
+
+                    <div class="col-lg-2">
+                        <div class="card" style="background-color:#3E3F4B">
+                            <div class="card-body text-light">
+                                <label for="director-validation" class="form-label">Director</label>
+                                <input class="form-control" id="director-validation" type="text" required=""/>
+                                <!--
+                                <select class="form-select form-select" aria-label=".form-select-sm example" id="director-validation" required="">
+                                    
+                                    <option selected="" disabled="" value="">Select rating</option>
+                                    <option value=0>Paul Ziller</option>
+                                    <option value=1>Ben Wheatley</option>
+                                    <option value=2>Srinivas Gavireddy</option>
+
+                                    <option value=3>Benjamin Caron</option>
+                                    <option value=4>Ravi Kapoor</option>
+                                    <option value=5>Danny LeGare</option>
+                                    <option value=6>Andrew Lawrence</option>
+                                    <option value=7>no director</option>
+                                    <option value=8>Peyton Reed</option>
+                                    <option value=9>Rohit Shetty</option>
+
+                                    <option value=10>Anandan .M.S.</option>
+                                    <option value=11>Lisbon Okafor</option>
+        
+                                    <option value=12>Michael Jacobs</option>
+                                    <option value=13>Aniruddha Roy Chowdhury</option>
+                                    <option value=14>Sumeet Nagdev</option>
+        
+                                    <option value=15>Pitipol Ybarra</option>
+                                    <option value=16>Walter Taylaur</option>
+                                    <option value=17>Eiichirô Hasumi</option>
+        
+                                    <option value=18>Vishnu Sasi Shankar</option>
+                                    <option value=19>Filip Zylber</option>
+
+                                    <option value=20>Jonah Feingold</option>
+                                    <option value=21>Kristin Fairweather</option>
+                                    <option value=22>Brandon Cronenberg</option>
+                                    <option value=23>Raaj Aashoo</option>
+                                    <option value=24>Dave Franco</option>
+                                    <option value=25>Florian Zeller</option>
+                                    <option value=26>Steven Soderbergh</option>
+                                    <option value=27>Matthew Newton</option>
+                                    <option value=28>Christopher Smith</option>
+                                    <option value=29>Erik Bloomquist</option>
+                                    <option value=30>Sri Ganesh</option>
+                                    <option value=31></option>
+                                    <option value=32></option>
+                                    <option value=33></option>
+                                    <option value=34></option>
+                                    <option value=35></option>
+                                    <option value=36></option>
+                                    <option value=37></option>
+                                    <option value=38></option>
+                                    <option value=39></option>
+                                    <option value=40></option>
+                                    <option value=41></option>
+                                    <option value=42></option>
+                                    <option value=43></option>
+                                    <option value=44></option>
+                                    <option value=45></option>
+                                    <option value=46></option>
+                                    <option value=47></option>
+                                    <option value=48></option>
+                                    <option value=49></option>
+                                    <option value=50></option>
+                                </select>
+                                -->
+                                <div class="invalid-feedback">
+                                    Please select a valid Director!
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="card" style="background-color:#3E3F4B">
+                            <div class="card-body text-light">
+                                <label for="writer-validation" class="form-label">Writer</label>
+                                <input type="text" class="form-control" id="writer-validation" placeholder="" required="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="card" style="background-color:#3E3F4B">
+                            <div class="card-body text-light">
+                                <label for="language-validation" class="form-label">Language</label>
+                                <input type="text" class="form-control" id="language-validation" placeholder="" required="">
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="col-lg-2">
+                        <div class="card" style="background-color:#3E3F4B">
+                            <div class="card-body text-light">
+                                <label for="runtime-validation" class="form-label">Duration</label>
+                                <input type="number" min="0" step="1" onKeyDown="return false" class="form-control" id="runtime-validation" placeholder="90" required="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-grid col-2 mx-auto mt-5">
+                <button class="btn btn-dark btn-lg" id="btn-submit" type="submit" onclick="return onclickSubmit()">
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" id="spinner" style="display:none;"></span>
+                    <span class="btn-result-text" id="btn-result-text">Get results</span>
+                </button>
+            </div>
+        </form>
+
+        <div id="liveAlertPlaceholder" class="mx-auto w-50 p-2"></div>
+
+
+        <h3 id="predictions-title" class="text-center text-light fs-1 fw-bold mt-5" style="visibility:hidden;">Predictions</h3>
+
+        <div id="predictions-wall" class="d-flex justify-content-center"  style="visibility:hidden;">
+
+            <div class="card" style="background-color:#3E3F4B">
+                <div class="card-body text-light">
+        
+                    <div class="row justify-content-md-center pt-3 px-3 pb-1">
+                        <div class="col">
+                            <span class="text-start fs-3" >Views:</span>
+                        </div>                           
+                        <div class="col text-end">
+                            <span id="views-number" class="text-end fs-3">1000</span>
+                        </div>                     
+                    </div>
+
+                    <!--
+                    <div class="row justify-content-md-center pb-3 px-3 pt-1">       
+                       <div class="col">
+                            <span class="text-start fs-3" >Downloads</span>
+                        </div> 
+                        <div class="col text-end">
+                            <span id="downloads-number" class="text-end fs-3" >1000</span>
+                        </div> 
+                                    
+                    </div>
+                    -->
+                </div>
+            </div>
+        </div>
+        
+
+
+<!--
+
+        <div class="container">
+            <main role="main" class="pb-3">
+                    <div class="card" style="background-color:#3E3F4B">
+                        <div class="card-body">
+                            <form>
+                                <div class="container text-center">
+                                    <div class="row align-items-start text-light">
+                                        <div class="col">
+                                            <div class="mb-3">
+                                                <label for="exampleFormControlInput1" class="form-label">IMDb rating</label>
+                                                <input type="number" min="0" max="10" step="0.1" onKeyDown="return false" class="form-control" id="amountInput" placeholder="6,8">
+                                            </div>
+                                        </div>
+    
+                                        <div class="col">
+                                            <div class="mb-3">
+                                                <label for="exampleFormControlInput1" class="form-label">appropriate for</label>
+                                                <select class="form-select form-select" aria-label=".form-select-sm example">
+                                                    <option selected>Select film rating</option>
+                                                    <option value=0>TV-PG</option>
+                                                    <option value=1>R</option>
+                                                    <option value=2>Unrated</option>
+    
+                                                    <option value=3>PG-13</option>
+                                                    <option value=4>TV-MA</option>
+                                                    <option value=5>TV-G</option>
+    
+                                                    <option value=6>TV-14</option>
+                                                    <option value=7>PG</option>
+                                                    <option value=8>TV-Y7</option>
+    
+                                                    <option value=9>G</option>
+                                                    <option value=10>NC-17</option>
+                                                    <option value=11>TV-Y</option>
+    
+                                                    <option value=12>Approved</option>
+                                                    <option value=13>TV-Y7-FV</option>
+                                                    <option value=14>MA-17</option>
+    
+                                                    <option value=15>TV-13</option>
+                                                    <option value=16>Drama</option>
+                                                    <option value=17>Drama, Romance</option>
+    
+                                                    <option value=18>Passed</option>
+                                                    <option value=19>18+</option>
+    
+                                                  </select>
+                                            </div>
+                                        </div>
+    
+                                        <div class="col">
+                                            <div class="mb-3">
+                                                <label for="exampleFormControlInput1" class="form-label">director</label>
+                                                <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="">
+                                            </div>
+                                        </div>
+    
+                                        <div class="col">
+                                            <div class="mb-3">
+                                                <label for="exampleFormControlInput1" class="form-label">writer</label>
+                                                <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="">
+                                            </div>
+                                        </div>
+    
+                                        <div class="col">
+                                            <div class="mb-3">
+                                                <label for="exampleFormControlInput1" class="form-label">industry</label>
+                                                <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="">
+                                            </div>
+                                        </div>
+    
+                                        <div class="col">
+                                            <div class="mb-3">
+                                                <label for="exampleFormControlInput1" class="form-label">language</label>
+                                                <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="">
+                                            </div>
+                                        </div>
+    
+                                        <div class="col">
+                                            <div class="mb-3">
+                                                <label for="exampleFormControlInput1" class="form-label">release date</label>
+                                                <input class="form-control" id="date" name="date" placeholder="MM/DD/YYY" type="text"/>
+                                            </div>
+                                        </div>
+    
+                                        <div class="col">
+                                            <div class="mb-3">
+                                                <label for="exampleFormControlInput1" class="form-label">duration</label>
+                                                <input type="number" min="0" step="1" onKeyDown="return false" class="form-control" id="amountInput" placeholder="90">
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+            </main>
+        </div>
+    -->
+        {% endblock %}
+
+        {% block scripts %}
+            <!-- Optional JavaScript -->
+            {{ bootstrap.load_js() }}
+        {% endblock %}
+
+        
+        <script>
+            // Example starter JavaScript for disabling form submissions if there are invalid fields
+            (() => {
+                'use strict'
+  
+                // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                const forms = document.querySelectorAll('.needs-validation')
+  
+                // Loop over them and prevent submission
+                Array.from(forms).forEach(form => {
+                    form.addEventListener('submit', event => {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+  
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+            })()
+
+            /*
+            let btn = document.getElementById("btn-submit");
+            btn.addEventListener('click', event => {
+                const forms = document.querySelectorAll('.needs-validation')
+  
+                Array.from(forms).forEach(form => {
+                    if (form.checkValidity()) {
+                        event.preventDefault()
+                        loading()
+                        send()
+                    }
+                })
+            });
+            */
+            function onclickSubmit(){
+                event.preventDefault();
+                hideResults()
+                const forms = document.querySelectorAll('.needs-validation')
+  
+                Array.from(forms).forEach(form => {
+                    if (form.checkValidity()) {
+                        //hideResults()
+                        loading()
+                        send()
+                    }
+                })
+            }
+
+            function stopLoading() {
+                //console.log(views)
+                var spinner = document.getElementById('spinner');
+                spinner.style.display = "none";
+                var btnText = document.getElementById('btn-result-text')
+                btnText.innerHTML = "Get results"
+            }
+
+            function loading() {
+                var spinner = document.getElementById('spinner');
+                spinner.style.display = "";
+                var btnText = document.getElementById('btn-result-text')
+                btnText.innerHTML = "Loading..."
+            }
+
+            function buildJSON(){
+                //TODO
+                var imdbRating = document.getElementById("imdb-validation").value;
+                var ageRating = document.getElementById("age-validation").value;
+                var industry = document.getElementById("industry-validation").value;
+                var releaseDate = document.getElementById("release_date").value;
+
+                var director = document.getElementById("director-validation").value;
+                var writer = document.getElementById("writer-validation").value;
+                var language = document.getElementById("language-validation").value;
+                var runtime = document.getElementById("runtime-validation").value;
+
+                const json = {
+                    imdb: imdbRating,
+                    age: ageRating,
+                    ind: industry,
+                    date: releaseDate,
+                    dir: director,
+                    wri: writer,
+                    lan: language,
+                    dur: runtime,
+                };
+                console.log(json)
+                return json
+            }
+
+            async function send() {
+                
+                const response = await fetch("/", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(buildJSON()),
+                });
+                const views = await response.json()
+                //console.log(views)
+                stopLoading(views)
+                if(views.error == false){
+                    showResults(views)
+                }
+                else{
+                    message = ""
+                    if(views.errors.some(x => x === 'dir')) message += "Director"
+                    if(views.errors.some(x => x === 'wri')) message += ", Writer"
+                    if(views.errors.some(x => x === 'lan')) message += ", Language"
+
+                    appendAlert('Values: ' + message + ' not found','danger')
+                    console.log(views.errors)
+                }
+                
+            }   
+
+            function showResults(json){
+                var predictions_wall = document.getElementById('predictions-wall')
+                var predictions_title = document.getElementById('predictions-title')
+                predictions_wall.style.visibility = ""
+                predictions_title.style.visibility = ""
+
+                var views_number = document.getElementById('views-number')
+                //var downloads_number = document.getElementById('downloads-number')
+
+                views_number.innerHTML = json.views
+                //downloads_number.innerHTML = json.downloads
+            }
+
+            function hideResults(){
+                var predictions_wall = document.getElementById('predictions-wall');
+                var predictions_title = document.getElementById('predictions-title');
+                predictions_wall.style.visibility = "hidden";
+                predictions_title.style.visibility = "hidden";
+            }
+
+            const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
+            const appendAlert = (message, type) => {
+                const wrapper = document.createElement('div')
+                wrapper.innerHTML = [
+                    `<div class="alert alert-${type} alert-dismissible" role="alert">`,
+                    `   <div>${message}</div>`,
+                    '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+                    '</div>'
+                ].join('')
+
+                alertPlaceholder.append(wrapper)
+            }
+
+            /*
+            html = "";
+            obj = {
+                "1" : "Name",
+                "2": "Age",
+                "3" : "Gender"
+            }
+            for(var key in obj) {
+                html += "<option value=" + obj[key]  + ">" + key + "</option>"
+            }
+            document.getElementById("datas").innerHTML = html;
+            */
+        </script>
+    </body>
+</html>
