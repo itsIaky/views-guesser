@@ -12,7 +12,10 @@ needed_data = ['IMDb Rating','Age Rating','Industry','Release date','Director','
 ageRating = {'TV-PG': 0, 'R': 1, 'Unrated': 2, 'PG-13': 3, 'TV-MA': 4, 'TV-G': 5, 'TV-14': 6, 'PG': 7, 'TV-Y7': 8, 'G': 9, 'NC-17': 10, 'TV-Y': 11, 'Approved': 12, 'TV-Y7-FV': 13, 'MA-17': 14, 'TV-13': 15, 'Drama': 16, 'Drama, Romance': 17, 'Passed': 18, '18+': 19}
 industry = {'Hollywood / English': 0, 'Tollywood': 1, 'Wrestling': 2, 'Bollywood / Indian': 3, 'Punjabi': 4, 'Anime / Kids': 5, 'Dub / Dual Audio': 6, 'Pakistani': 7, 'Stage shows': 8, '3D Movies': 9}
 
-
+@bot.message_handler(commands=['start'])
+def start(message):
+    bot.reply_to(message, "Welcome! \nPlease, Enter the data relating the film whose views you want to predict")
+    bot.send_message(message.chat.id, "Start by entering the IMDb Rating")
 
 @bot.message_handler(func=lambda msg: True)
 def echo_all(message):
@@ -25,10 +28,8 @@ def echo_all(message):
     situationIndex = startedChats.index(message.chat.id)
     chat_talking_with_me = chatsInformation[situationIndex]
     msg = message.text
-    if ( 'start' in message.text ):
-        bot.reply_to(message, "Welcome! \nPlease, Enter the data relating the film whose views you want to predict")
-        bot.reply_to(message, "Start by entering the IMDb Rating")
-    elif ( 'help' in message.text ):
+    
+    if ( 'help' in message.text ):
         response = 'The informations that you should enter are:\n'
         for i in needed_data:
             response += i + '\n'
@@ -138,8 +139,8 @@ def echo_all(message):
             bot.reply_to(message, "Whait. I'm calculating the views that it is going to get if it was pirated by someone in the internet")
             responce = Service.Predicter().predict(chat_talking_with_me["data"])
             views = int(responce[0])
-            bot.reply_to(message, "Based on my calculations your title is going to get " + str(views) + " veiws")
-            bot.reply_to(message,"If you what to predict the views of another film just start by entering the IMDb rating")
+            bot.send_message(message.chat.id, "Based on my calculations your title is going to get " + str(views) + " veiws")
+            bot.send_message(message.chat.id,"If you what to predict the views of another film just start by entering the IMDb rating")
             chat_talking_with_me["N"] = 0
             chat_talking_with_me["data"].clear()
         else:

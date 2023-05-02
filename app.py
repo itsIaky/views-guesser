@@ -36,4 +36,4 @@ def run_predict():
     #return ToDoService().create(request.get_json())
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, threaded=True)
