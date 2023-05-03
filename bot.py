@@ -57,7 +57,7 @@ def echo_all(message):
         chatsInformation.append({"chatid":message.chat.id, "N":0, "data":{}})
     situationIndex = startedChats.index(message.chat.id)
     chat_talking_with_me = chatsInformation[situationIndex]
-    msg = message.text
+    msg = message.text.replace('\n','')
     
     if ( 'help' in message.text ):
         response = 'The informations that you should enter are:\n'
@@ -127,6 +127,7 @@ def echo_all(message):
                 #    if msg in code:
                 #        possibleDirectors+=code + '\n'
                 bot.reply_to(message, "You've inserted a director that does not exist.")
+                bot.send_message(message.chat.id, "Remember the max number of directors is 3")
                 if possibleDirectors != "":
                     bot.reply_to(message,"Please try with one of there:\n" + possibleDirectors)
                 errors = True
@@ -143,6 +144,7 @@ def echo_all(message):
                     for code in difflib.get_close_matches(w.strip(), list(Service.Predicter().writer.keys())):
                         possibleWriters+=code + '\n'
                 bot.reply_to(message, "You've inserted a writer that does not exist.")
+                bot.send_message(message.chat.id, "Remember the max number of writer is 6")
                 if possibleWriters != "":
                     bot.reply_to(message,"Please try with one of there:\n" + possibleWriters)
                 errors = True
