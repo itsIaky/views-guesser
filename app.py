@@ -5,6 +5,7 @@ from flask import request
 import time
 import math
 from Service import *
+from bot import *
 
 app = Flask(__name__)
 bootstrap = Bootstrap5(app)
@@ -37,3 +38,4 @@ def run_predict():
 
 if __name__ == "__main__":
     app.run(debug=True, threaded=True)
+    
