@@ -57,6 +57,44 @@ class Predicter:
         LGBM = pickle.load(open("LGBM", 'rb'))
         
         return LGBM.predict(df)
+    
+    def checkWriter(self, msg):
+        values = msg.strip().lower().split(',')
+        not_understood = []
+        
+        if len(values) >= 6:
+            not_understood.append("too_many_values")
+        for v in values:
+            if v not in self.writer.keys():
+                not_understood.append(v)
+                
+        return not_understood
+
+    
+    def checkDirector(self, msg):
+        values = msg.strip().lower().split(',')
+        not_understood = []
+
+        if len(values) >= 3:
+            not_understood.append("too_many_values")
+
+        for v in values:
+            if v not in self.director.keys():
+                not_understood.append(v)
+        
+        return not_understood
+
+
+    
+    def checkLanguage(self, msg):
+        values = msg.strip().lower().split(',')
+        not_understood = []
+        for v in values:
+            if v not in self.language.keys():
+                not_understood.append(v)
+                
+        return not_understood
+
 
 
 

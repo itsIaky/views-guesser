@@ -3,6 +3,7 @@ from keys import *
 import Service
 from datetime import datetime
 import json
+import difflib
 
 bot = telebot.TeleBot(token=chiave)
 
@@ -16,6 +17,35 @@ industry = {'Hollywood / English': 0, 'Tollywood': 1, 'Wrestling': 2, 'Bollywood
 def start(message):
     bot.reply_to(message, "Welcome! \nPlease, Enter the data relating the film whose views you want to predict")
     bot.send_message(message.chat.id, "Start by entering the IMDb Rating")
+
+@bot.message_handler(commands=['search'])
+def search(message):
+    search_array = message.text.split(' ')[1].lower()
+    search = message.text.removeprefix("/search " + search_array).strip().lower()
+
+    if search_array == "industry":
+        possibleIndustries = ""
+        print(search)
+        for code in difflib.get_close_matches(search.strip().lower(), list(Service.Predicter().industry.keys())):
+            possibleIndustries+=code + '\n'
+        bot.reply_to(message, "Search results:\n" + possibleIndustries)
+    elif search_array == "director":
+        possibleDirectors = ""
+        for code in difflib.get_close_matches(search.strip().lower(), list(Service.Predicter().director.keys())):
+            possibleDirectors+=code + '\n'
+        bot.reply_to(message, "Search results:\n" + possibleDirectors)
+    elif search_array == "writer":
+        possibleWriters= ""
+        for code in difflib.get_close_matches(search.strip().lower(), list(Service.Predicter().writer.keys())):
+            possibleWriters+=code + '\n'
+        bot.reply_to(message, "Search results:\n" + possibleWriters)
+    elif search_array == "language":
+        possibleLanguages = ""
+        for code in difflib.get_close_matches(search.strip().lower(), list(Service.Predicter().language.keys())):
+            possibleLanguages+=code + '\n'
+        bot.reply_to(message, "Search results:\n" + possibleLanguages)
+    else:
+        bot.reply_to(message, "Can't find " + search_array)
 
 @bot.message_handler(func=lambda msg: True)
 def echo_all(message):
@@ -65,9 +95,9 @@ def echo_all(message):
                 chat_talking_with_me["N"]+=1
         elif chat_talking_with_me["N"] == 2:
             # controllo sull'idustria
-            if msg not in industry.keys():
+            if msg not in Service.Predicter().industry.keys():
                 possibleIndustries = ""
-                for code in industry.keys():
+                for code in difflib.get_close_matches(msg.strip().lower(), list(Service.Predicter().industry.keys())):
                     possibleIndustries+=code + '\n'
                 bot.reply_to(message, "You've inserted an industry that does not exist.")
                 bot.reply_to(message,"Please try with one of there:\n" + possibleIndustries)
@@ -86,11 +116,16 @@ def echo_all(message):
                 errors = True
         elif chat_talking_with_me["N"] == 4:
             # controllo sul director
-            if msg not in Service.Predicter().director:
+            #if msg not in Service.Predicter().director:
+            if len(Service.Predicter().checkDirector(msg)) != 0:
                 possibleDirectors = ""
-                for code in Service.Predicter().director.keys():
-                    if msg in code:
-                        possibleDirectors+=code + '\n'
+                directors = msg.lower().split(',')
+                for d in directors:
+                    for s in difflib.get_close_matches(d.strip(), list(Service.Predicter().director.keys())):
+                        possibleDirectors += s + '\n'
+                #for code in Service.Predicter().director.keys():
+                #    if msg in code:
+                #        possibleDirectors+=code + '\n'
                 bot.reply_to(message, "You've inserted a director that does not exist.")
                 if possibleDirectors != "":
                     bot.reply_to(message,"Please try with one of there:\n" + possibleDirectors)
@@ -100,10 +135,12 @@ def echo_all(message):
                 chat_talking_with_me["N"]+=1
         elif chat_talking_with_me["N"] == 5:
             # controllo sul writer
-            if msg not in Service.Predicter().writer:
+            #if msg not in Service.Predicter().writer:
+            if len(Service.Predicter().checkWriter(msg)) != 0:
                 possibleWriters = ""
-                for code in Service.Predicter().director.keys():
-                    if msg in code:
+                writers = msg.lower().split(',')
+                for w in writers:
+                    for code in difflib.get_close_matches(w.strip(), list(Service.Predicter().writer.keys())):
                         possibleWriters+=code + '\n'
                 bot.reply_to(message, "You've inserted a writer that does not exist.")
                 if possibleWriters != "":
@@ -114,7 +151,8 @@ def echo_all(message):
                 chat_talking_with_me["N"]+=1
         elif chat_talking_with_me["N"] == 6:
             # controllo sulla ligua
-            if msg not in Service.Predicter().language:
+            #if msg not in Service.Predicter().language:
+            if len(Service.Predicter().checkLanguage(msg)) != 0:
                 bot.reply_to(message, "You've inserted a language that does not exist.\nPlease retry")
                 errors = True
             else:
