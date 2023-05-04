@@ -7,6 +7,11 @@ import difflib
 
 bot = telebot.TeleBot(token=chiave)
 
+def greenSquare():
+    return u'\U00002705'
+def redSquare():
+    return u'\U0000274C'
+
 startedChats = []
 chatsInformation = []
 needed_data = ['IMDb Rating','Age Rating','Industry','Release date','Director','Writer','Language','Duration']
@@ -18,8 +23,31 @@ def start(message):
     bot.reply_to(message, "Welcome! \nPlease, Enter the data relating the film whose views you want to predict")
     bot.send_message(message.chat.id, "Start by entering the IMDb Rating")
 
-
-
+@bot.message_handler(commands=['stats'])
+def stats(message):
+    if message.chat.id not in startedChats:
+        startedChats.append(message.chat.id)
+        chatsInformation.append({"chatid":message.chat.id, "N":0, "data":{}})
+    situationIndex = startedChats.index(message.chat.id)
+    chat_talking_with_me = chatsInformation[situationIndex]
+    keys = list(chat_talking_with_me["data"].keys())
+    res = "Data you have submitted:"
+    i = 0
+    while i < len(needed_data):
+        if i < len(chat_talking_with_me["data"].keys()) : res += "\n " + greenSquare() + " " + needed_data[i] + ": " + str(chat_talking_with_me["data"][keys[i]])
+        else: res += "\n " + redSquare() + " " + needed_data[i] + ": -"
+        i+=1
+    bot.reply_to(message, res)
+    
+@bot.message_handler(commands=['clear'])
+def clear(message):
+    if message.chat.id not in startedChats:
+        startedChats.append(message.chat.id)
+        chatsInformation.append({"chatid":message.chat.id, "N":0, "data":{}})
+    else:
+        situationIndex = startedChats.index(message.chat.id)
+        chatsInformation[situationIndex] = {"chatid":message.chat.id, "N":0, "data":{}}
+    bot.reply_to(message, "Your submitted data has been deleted")
 
 @bot.message_handler(commands=['help','?'])
 def start(message):
@@ -35,7 +63,7 @@ def start(message):
         for i in needed_data:
             response += i + '\n'
         bot.reply_to(message, response)
-        bot.send_message(message.chat.id,"You can start by entering the IMDb Rating\nNormally it is a number between 0 and 10.")
+        bot.send_message(message.chat.id,"You can start by entering the IMDb Rating\nIt should be a number between 0 and 10.")
     elif chat_talking_with_me["N"] == 1:
         possibleRating = ""
         for code in ageRating.keys():
@@ -146,7 +174,7 @@ def echo_all(message):
         chatsInformation.append({"chatid":message.chat.id, "N":0, "data":{}})
     situationIndex = startedChats.index(message.chat.id)
     chat_talking_with_me = chatsInformation[situationIndex]
-    msg = message.text.replace('\n','')
+    msg = message.text.replace('\n','').lower().strip()
     print(msg)
     errors = False
     #Tutti i vari controlli
@@ -171,7 +199,7 @@ def echo_all(message):
             for code in ageRating.keys():
                 possibleRating+=code + '\n'
             bot.reply_to(message, "You've inserted an age Rating that does not exist.")
-            bot.reply_to(message,"Please try with one of there:\n" + possibleRating)
+            bot.send_message(message.chat.id,"Please try with one of there:\n" + possibleRating)
             errors = True
         else:
             chat_talking_with_me["data"]["age"] = Service.Predicter().ageRating[msg]
@@ -183,7 +211,7 @@ def echo_all(message):
             for code in difflib.get_close_matches(msg.strip().lower(), list(Service.Predicter().industry.keys())):
                 possibleIndustries+=code + '\n'
             bot.reply_to(message, "You've inserted an industry that does not exist.")
-            bot.reply_to(message,"Please try with one of there:\n" + possibleIndustries)
+            bot.send_message(message.chat.id,"Please try with one of there:\n" + possibleIndustries)
             errors = True
         else:
             chat_talking_with_me["data"]["ind"] = Service.Predicter().industry[msg]
@@ -270,7 +298,9 @@ def echo_all(message):
         if errors == False:
             res = "Good. Now enter " + needed_data[chat_talking_with_me["N"]]
             if chat_talking_with_me["N"] == 3:
-                res+="\nReamember that the date should be written by using this format (YYYY-mm-dd)"
+                res+="\nRemember that the date should be written by using this format (YYYY-mm-dd)"
+            if chat_talking_with_me["N"] in [4, 5, 6]:
+                res+="\nRemember that you can send multiple directors, writers or languages by separating each of them with a comma (',')"
             bot.reply_to(message,res)
     errors = False
 
