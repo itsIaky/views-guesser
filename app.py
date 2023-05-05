@@ -5,7 +5,7 @@ from flask import request
 import time
 import math
 from Service import *
-from bot import *
+#from bot import *
 
 app = Flask(__name__)
 bootstrap = Bootstrap5(app)

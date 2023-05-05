@@ -22,17 +22,24 @@ class Predicter:
         errors_array = [] 
         
         response = {"error": False}
-        if film_values["dir"] not in self.director.keys():
-            response["error"] = True
-            errors_array.append("dir")
-        
-        if film_values["wri"]not in self.writer.keys():
-            response["error"] = True
-            errors_array.append("wri")
 
-        if film_values["lan"] not in self.language.keys():
-            response["error"] = True
-            errors_array.append("lan")
+        dire = film_values["dir"].lower().split(',')
+        for d in dire:
+            if d.strip() not in self.director.keys():
+                response["error"] = True
+                errors_array.append(d.strip())
+
+        writ = film_values["wri"].lower().split(',')
+        for w in writ:
+            if w.strip() not in self.writer.keys():
+                response["error"] = True
+                errors_array.append(w.strip())
+
+        lang = film_values["lan"].lower().split(',')
+        for l in lang:
+            if l.strip() not in self.language.keys():
+                response["error"] = True
+                errors_array.append(l.strip())
         
         if errors_array.count != 0:
             response["errors"] = errors_array
