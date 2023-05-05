@@ -52,14 +52,14 @@ class Predicter:
         d = [0,0,0]
         i = 0
         while i < len(dire):
-            d[i] = self.director[dire[i]]
+            d[i] = self.director[dire[i].strip()]
             i+=1
 
         writ = film_values["wri"].lower().split(',')
         w = [0,0,0,0,0,0]
         i = 0
         while i < len(writ):
-            w[i] = self.writer[writ[i]]
+            w[i] = self.writer[writ[i].strip()]
             i+=1
 
         languages = film_values["lan"].lower().split(',')
@@ -89,8 +89,18 @@ class Predicter:
         
         if len(values) > 6:
             not_understood.append("too_many_values")
+
+        index = 0
+        while index < len(values):
+            values[index] = values[index].strip().lower()
+            index+=1
+        for valu in values:
+            if values.count(valu) != 1:
+                not_understood.append("duplicated_value")
+
         for v in values:
-            if v not in self.writer.keys():
+            vir = v.replace('-',' ').strip()
+            if vir not in self.writer.keys():
                 not_understood.append(v)
                 
         return not_understood
@@ -99,12 +109,20 @@ class Predicter:
     def checkDirector(self, msg):
         values = msg.strip().lower().split(',')
         not_understood = []
-
         if len(values) > 3:
             not_understood.append("too_many_values")
+        index = 0
+        while index < len(values):
+            values[index] = values[index].strip().lower()
+            index+=1
+        for valu in values:
+            if values.count(valu) != 1:
+                not_understood.append("duplicated_value")
 
         for v in values:
-            if v not in self.director.keys():
+            vir = v.replace('-',' ').strip()
+            print(vir)
+            if vir not in self.director.keys():
                 not_understood.append(v)
         
         return not_understood
@@ -114,6 +132,15 @@ class Predicter:
     def checkLanguage(self, msg):
         values = msg.strip().lower().split(',')
         not_understood = []
+
+        index = 0
+        while index < len(values):
+            values[index] = values[index].strip().lower()
+            index+=1
+        for valu in values:
+            if values.count(valu) != 1:
+                not_understood.append("duplicated_value")
+
         for v in values:
             if v not in self.language.keys():
                 not_understood.append(v)

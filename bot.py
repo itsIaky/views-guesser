@@ -34,7 +34,15 @@ def stats(message):
     res = "Data you have submitted:"
     i = 0
     while i < len(needed_data):
-        if i < len(chat_talking_with_me["data"].keys()) : res += "\n " + greenSquare() + " " + needed_data[i] + ": " + str(chat_talking_with_me["data"][keys[i]])
+        if i < len(chat_talking_with_me["data"].keys()):
+            res += "\n " + greenSquare() + " " + needed_data[i] + ": "
+            if keys[i] not in ["age","ind"]: 
+                res += str(chat_talking_with_me["data"][keys[i]])
+            else:
+                if keys[i] == "age":
+                    res += str(list(Service.Predicter().ageRating.keys())[list(Service.Predicter().ageRating.values()).index(chat_talking_with_me["data"][keys[i]])])
+                else:
+                    res += str(list(Service.Predicter().industry.keys())[list(Service.Predicter().industry.values()).index(chat_talking_with_me["data"][keys[i]])])
         else: res += "\n " + redSquare() + " " + needed_data[i] + ": -"
         i+=1
     bot.reply_to(message, res)
@@ -199,7 +207,7 @@ def echo_all(message):
             for code in ageRating.keys():
                 possibleRating+=code + '\n'
             bot.reply_to(message, "You've inserted an age Rating that does not exist.")
-            bot.send_message(message.chat.id,"Please try with one of there:\n" + possibleRating)
+            bot.reply_to(message,"Please try with one of these:\n" + possibleRating)
             errors = True
         else:
             chat_talking_with_me["data"]["age"] = Service.Predicter().ageRating[msg]
@@ -228,19 +236,21 @@ def echo_all(message):
     elif chat_talking_with_me["N"] == 4:
         # controllo sul director
         #if msg not in Service.Predicter().director:
-        if len(Service.Predicter().checkDirector(msg)) != 0:
-            possibleDirectors = ""
-            directors = msg.lower().split(',')
-            for d in directors:
-                for s in difflib.get_close_matches(d.strip(), list(Service.Predicter().director.keys())):
-                    possibleDirectors += s + '\n'
-            #for code in Service.Predicter().director.keys():
-            #    if msg in code:
-            #        possibleDirectors+=code + '\n'
-            bot.reply_to(message, "You've inserted a director that does not exist.")
-            bot.send_message(message.chat.id, "Remember the max number of directors is 3")
-            if possibleDirectors != "":
-                bot.reply_to(message,"Please try with one of there:\n" + possibleDirectors)
+        check = Service.Predicter().checkDirector(msg)
+        if len(check) != 0:
+            if "duplicated_value" in check:
+                bot.reply_to(message,"You've inserted a double value.\nPlease retry")
+            elif "too_many_values" in check:
+                bot.reply_to(message,"You've inserted too many values.")
+            else:
+                possibleDirectors = ""
+                directors = msg.lower().split(',')
+                for d in directors:
+                    for s in difflib.get_close_matches(d.strip(), list(Service.Predicter().director.keys())):
+                        possibleDirectors += s + '\n'
+                bot.reply_to(message, "You've inserted a director that does not exist.")
+                if possibleDirectors != "":
+                    bot.reply_to(message,"Please try with one of these:\n" + possibleDirectors)
             errors = True
         else:
             chat_talking_with_me["data"]["dir"] = msg
@@ -248,16 +258,21 @@ def echo_all(message):
     elif chat_talking_with_me["N"] == 5:
         # controllo sul writer
         #if msg not in Service.Predicter().writer:
-        if len(Service.Predicter().checkWriter(msg)) != 0:
-            possibleWriters = ""
-            writers = msg.lower().split(',')
-            for w in writers:
-                for code in difflib.get_close_matches(w.strip(), list(Service.Predicter().writer.keys())):
-                    possibleWriters+=code + '\n'
-            bot.reply_to(message, "You've inserted a writer that does not exist.")
-            bot.send_message(message.chat.id, "Remember the max number of writer is 6")
-            if possibleWriters != "":
-                bot.reply_to(message,"Please try with one of there:\n" + possibleWriters)
+        check = Service.Predicter().checkWriter(msg)
+        if len(check) != 0:
+            if "duplicated_value" in check:
+                bot.reply_to(message,"You've inserted a duplicated value.\nPlease retry")
+            elif "too_many_values" in check:
+                bot.reply_to(message,"You've inserted too many values.")
+            else:
+                possibleWriters = ""
+                writers = msg.lower().split(',')
+                for w in writers:
+                    for code in difflib.get_close_matches(w.strip(), list(Service.Predicter().writer.keys())):
+                        possibleWriters+=code + '\n'
+                bot.reply_to(message, "You've inserted a writer that does not exist.")
+                if possibleWriters != "":
+                    bot.reply_to(message,"Please try with one of these:\n" + possibleWriters)
             errors = True
         else:
             chat_talking_with_me["data"]["wri"] = msg
@@ -265,8 +280,12 @@ def echo_all(message):
     elif chat_talking_with_me["N"] == 6:
         # controllo sulla ligua
         #if msg not in Service.Predicter().language:
-        if len(Service.Predicter().checkLanguage(msg)) != 0:
-            bot.reply_to(message, "You've inserted a language that does not exist.\nPlease retry")
+        check = Service.Predicter().checkLanguage(msg)
+        if len(check) != 0:
+            if "dublicated_value" in check:
+                bot.reply_to(message,"You've inserted a duplicated value.\nPlease retry")
+            else:
+                bot.reply_to(message, "You've inserted a language that does not exist.\nPlease retry")
             errors = True
         else:
             chat_talking_with_me["data"]["lan"] = msg
@@ -300,12 +319,11 @@ def echo_all(message):
             if chat_talking_with_me["N"] == 3:
                 res+="\nRemember that the date should be written by using this format (YYYY-mm-dd)"
             if chat_talking_with_me["N"] in [4, 5, 6]:
-                res+="\nRemember that you can send multiple directors, writers or languages by separating each of them with a comma (',')"
+                res+="\nRemember that you can send multiple directors (3), writers (6) or languages by separating each of them with a comma (',')"
             bot.reply_to(message,res)
     errors = False
 
 bot.infinity_polling()
-
         
         
 
